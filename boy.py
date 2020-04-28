@@ -32,5 +32,9 @@ async def roll(ctx, number_of_dice: int, number_of_sides: int):
     ]
     await ctx.send(', '.join(dice))
 
-bot.run(TOKEN)
 
+@bot.command(name = 'who_is_a_good_boy', help='Returns who is a good boy.')
+async def who_is_a_good_boi(ctx):
+    await ctx.send('*barks happily*')
+
+bot.run(TOKEN)
