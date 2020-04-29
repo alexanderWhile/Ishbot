@@ -30,10 +30,10 @@ async def on_member_join(member):
 
 
 @bot.command(name='roll', help='Simulates rolling dice.')
-async def roll(ctx, *args):
+async def roll(ctx, d):
     try:
-        result = xdice.roll("".join(args).replace(' ', ''))
-        await ctx.send("%s: %s" % (result, result.format()))
+        result = xdice.roll(d)
+        await ctx.send(result)
     except:
         await ctx.send("I don't understand what you want me to do.")
         traceback.print_exc()
