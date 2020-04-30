@@ -62,10 +62,10 @@ class Hand:
     
     def result(self):
         if self.total() > BLACKJACK:
-            bust = True
+            self.bust = True
             return "Bust!"
         elif self.total() == BLACKJACK:
-            twentyone = True
+            self.twentyone = True
             return "Blackjack!"
         else:
              return f"Your final hand is worth {self.total()}"
@@ -142,11 +142,15 @@ while(game.upper() == "Y"):
         player.show()
         while(player.total() < 21):
             hit = input("Hit or pass? [H/P]: ")
+            while (hit.upper() != "H" and hit.upper() != "P"):
+                hit = input("I don't understand. Hit or pass? [H/P]: ")
             while (hit.upper() == "H"):
                 player.hit(DECK)
                 player.show()
-                hit = input("Hit or pass? [H/P]: ")
-            break
+                if player.total() < BLACKJACK:
+                    hit = input("Hit or pass? [H/P]: ")
+                else:
+                    break
         if player.twentyone == True:
             WINNERS.append(player.name)
 
@@ -159,7 +163,7 @@ while(game.upper() == "Y"):
         print("Everyone wins!")
     else:
         for player in PLAYERS_HANDS:
-            if player.total() > DEALER_HAND.total() and player not in WINNERS:
+            if player.total() > DEALER_HAND.total() and player not in WINNERS and player.bust != True:
                 WINNERS.append(player)
         if len(WINNERS) == 0:
             print("No one wins!")
