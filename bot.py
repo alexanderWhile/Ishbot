@@ -9,12 +9,32 @@ import traceback
 
 from discord.ext import commands
 
+import re
+
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
 bot = commands.Bot(command_prefix='<:IshBot:704803379452313710> ')
 
+def find_rolls(s):
+    inside = False
+    matches = []
+    # split on whitespace
+    # split on the empty space adjacent to $$'s.
+    for tok in re.split(r'\s+|(?<=\$\$)(?=\S)|(?<=\S)(?=\$\$)', s):
+        if re.match(r'\S*\$\$|\$\$\S*', tok):
+            if inside:
+                inside = False
+                matches.append(" ".join(cur))
+            else:
+                inside = True
+                cur = []
+            continue
 
+        if inside:
+            cur.append(tok)
+
+    return matches
 
 @bot.event
 async def on_ready():
@@ -75,5 +95,11 @@ async def on_message(message):
 
     if there_are_bad_words:
         await message.channel.send('Watch your profamity!')
+
+    for match in find_rolls(message.content):
+        result = xdice.roll("".join(match).replace(' ', ''))
+        await message.channel.send("%s: %s" % (result, result.format()))
+
+    await bot.process_commands(message)
 
 bot.run(TOKEN)
