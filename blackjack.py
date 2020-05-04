@@ -129,9 +129,6 @@ while(game.upper() == "Y"):
             print("I don't understand.")
         if num_players <= 0:
             print("Please type a positive number.")
-    
-
-
 
     PLAYERS_HANDS = first_deal_players(DECK, num_players)
     DEALER_HAND = first_deal_dealer(DECK)
@@ -140,18 +137,18 @@ while(game.upper() == "Y"):
 
     for player in PLAYERS_HANDS:
         player.show()
-        while(player.total() < 21):
+        while player.total() < 21:
             hit = input("Hit or pass? [H/P]: ")
-            while (hit.upper() != "H" and hit.upper() != "P"):
-                hit = input("I don't understand. Hit or pass? [H/P]: ")
-            while (hit.upper() == "H"):
+            if hit.upper() == "H":
                 player.hit(DECK)
                 player.show()
-                if player.total() < BLACKJACK:
-                    hit = input("Hit or pass? [H/P]: ")
-                else:
-                    break
-        if player.twentyone == True:
+            elif hit.upper() == "P":
+                break
+            else:
+                print("I don't understand.")
+
+        if player.twentyone:
+            print("Blackjack!")
             WINNERS.append(player.name)
 
         print(player.result())
