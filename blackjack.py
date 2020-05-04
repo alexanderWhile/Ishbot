@@ -159,18 +159,18 @@ while(game.upper() == "Y"):
     DEALER_HAND.play(DECK)
     print(DEALER_HAND.result())
 
-    if DEALER_HAND.bust == True:
-        print("Everyone wins!")
-    else:
-        for player in PLAYERS_HANDS:
-            if player.total() > DEALER_HAND.total() and player not in WINNERS and player.bust != True:
+    for player in PLAYERS_HANDS:
+        if player not in WINNERS and not player.bust:
+            if DEALER_HAND.total() > 21:
                 WINNERS.append(player)
-        if len(WINNERS) == 0:
-            print("No one wins!")
-        else:
-            print("Winners: ")
-            for winner in WINNERS:
-                print(f"{winner.name}! ", end="")
+            elif player.total() > DEALER_HAND.total():
+                WINNERS.append(player)
+    if len(WINNERS) == 0:
+        print("No one wins!")
+    else:
+        print("Winners: ")
+        for winner in WINNERS:
+            print(f"{winner.name}!")
 
     game = input("Play again? [Y/N]: ")
     while (game.upper() != "Y" and game.upper() !="N"):
